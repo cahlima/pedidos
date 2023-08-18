@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NonNullableFormBuilder, FormGroup } from '@angular/forms';
+import { NonNullableFormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ClientsService } from '../../services/clients.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Location } from '@angular/common';
@@ -14,9 +14,9 @@ import { Client } from './../../model/client';
 export class ClientFormComponent {
   form = this.formBuilder.group({
     id: [-1],
-    name: [''],
-    surname: [''],
-    cpf: ['']
+    name: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
+    surname: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
+    cpf: ['', [Validators.required, Validators.minLength(11),  Validators.maxLength(11)]]
   });
 
   constructor(private formBuilder: NonNullableFormBuilder,
@@ -55,5 +55,21 @@ export class ClientFormComponent {
     this.snackBar.open("Erro ao salvar o cliente!", '', {duration: 2000});
     // TODO - Alterar quando chamar a API
     this.onCancel();
+  }
+
+  getErrorMessage(fieldName: string) {
+    const field = this.form.get(fieldName);
+    if (field?.hasError('required')) {
+      return "Campo obrigatório"
+    }
+    if (field?.hasError('minlength')) {
+      const requiredLength = field.errors? field.errors['minlength']["requiredLength"] : 5;
+      return `O tamanho mínimo precisa ser de ${requiredLength} caracteres.`
+    }
+    if (field?.hasError('maxlength')) {
+      const requiredLength = field.errors? field.errors['maxlength']["requiredLength"] : 5;
+      return `Tamanho máximo excedido de ${requiredLength} caracteres.`
+    }
+    return "Erro"
   }
 }
