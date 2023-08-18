@@ -1,0 +1,28 @@
+<mat-table [dataSource]="products">
+    <!-- Name Column -->
+    <ng-container matColumnDef="description">
+        <mat-header-cell *matHeaderCellDef> Descrição </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.description}} </mat-cell>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef class="action-column">
+            <button class="action-column-header" (click)="onAdd()" mat-mini-fab color="accent" aria-label="Adicionar um produto">
+                <mat-icon>add</mat-icon>
+            </button>
+        </mat-header-cell>
+
+        <mat-cell *matCellDef="let product" class="action-column">
+            <button (click)="onEdit(product)" mat-icon-button color="primary" aria-label="Editar produto">
+                <mat-icon>edit</mat-icon>
+            </button>
+            <button (click)="onDelete(product)" mat-icon-button color="warn" aria-label="remover produto">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>

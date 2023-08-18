@@ -1,38 +1,34 @@
 import { Component } from '@angular/core';
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
-import { ClientsService } from '../../services/clients.service';
+import { ProductsService } from '../../services/products.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { Client } from './../../model/client';
+import { Product } from './../../model/product';
 
 @Component({
-  selector: 'app-client-form',
-  templateUrl: './client-form.component.html',
-  styleUrls: ['./client-form.component.scss']
+  selector: 'app-product-form',
+  templateUrl: './product-form.component.html',
+  styleUrls: ['./product-form.component.scss']
 })
-export class ClientFormComponent {
+export class ProductFormComponent {
   form = this.formBuilder.group({
     id: [-1],
-    name: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]],
-    surname: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
-    cpf: ['', [Validators.required, Validators.minLength(11),  Validators.maxLength(11)]]
+    description: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(45)]],
   });
 
   constructor(private formBuilder: NonNullableFormBuilder,
-    private service: ClientsService,
+    private service: ProductsService,
     private snackBar: MatSnackBar,
     private location: Location,
     private route: ActivatedRoute ) {
   }
 
   ngOnInit(): void {
-    const client: Client = this.route.snapshot.data['client'];
+    const product: Product = this.route.snapshot.data['product'];
     this.form.setValue({
-      id: client.id,
-      name: client.name,
-      surname: client.surname,
-      cpf: client.cpf
+      id: product.id,
+      description: product.description
     })
   }
 
@@ -47,12 +43,12 @@ export class ClientFormComponent {
   }
 
   private onSuccess() {
-    this.snackBar.open("Cliente salvo com sucesso!", '', {duration: 2000});
+    this.snackBar.open("Produto salvo com sucesso!", '', {duration: 2000});
     this.onCancel();
   }
 
   private onError() {
-    this.snackBar.open("Erro ao salvar o cliente!", '', {duration: 2000});
+    this.snackBar.open("Erro ao salvar o produto!", '', {duration: 2000});
     // TODO - Alterar quando chamar a API
     this.onCancel();
   }

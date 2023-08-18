@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Client } from '../../model/client';
-import { ClientsService } from '../../services/clients.service';
+import { Product } from '../../model/product';
+import { ProductsService } from '../../services/products.service';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators'
 import { MatDialog } from '@angular/material/dialog';
@@ -10,16 +10,16 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
-  selector: 'app-clients',
-  templateUrl: './clients.component.html',
-  styleUrls: ['./clients.component.scss']
+  selector: 'app-products',
+  templateUrl: './products.component.html',
+  styleUrls: ['./products.component.scss']
 })
-export class ClientsComponent implements OnInit {
+export class ProductsComponent implements OnInit {
   
-  clients$: Observable<Client[]> | null = null;
-  displayedColumns: string[] = ['name', 'surname', 'cpf', 'actions'];
+  products$: Observable<Product[]> | null = null;
+  displayedColumns: string[] = ['description', 'actions'];
 
-  constructor(private clientsService: ClientsService,
+  constructor(private productsService: ProductsService,
     public dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute,
@@ -28,8 +28,8 @@ export class ClientsComponent implements OnInit {
   }
 
   refresh() {
-    this.clients$ = this.clientsService.list().pipe(catchError(error => {
-      this.onError('Erro ao carregar clientes.')
+    this.products$ = this.productsService.list().pipe(catchError(error => {
+      this.onError('Erro ao carregar produtos.')
       return of([]);
     }));
   }
@@ -46,24 +46,24 @@ export class ClientsComponent implements OnInit {
     this.router.navigate(['new'], {relativeTo: this.route})
   }
 
-  onEdit(client: Client) {
-    this.router.navigate(['edit', client.id], {relativeTo: this.route})
+  onEdit(product: Product) {
+    this.router.navigate(['edit', product.id], {relativeTo: this.route})
   }
 
-  onDelete(client: Client) {
+  onDelete(product: Product) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: "Tem certeza que deseja remover esse cliente?",
+      data: "Tem certeza que deseja remover esse produto?",
     });
 
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
-        this.clientsService.delete(client.id).subscribe({
+        this.productsService.delete(product.id).subscribe({
           next: () => {
             this.refresh();
-            this.snackBar.open('Cliente removido com sucesso!', 'X', 
+            this.snackBar.open('Produto removido com sucesso!', 'X', 
           {duration: 2000, verticalPosition: 'top', horizontalPosition: 'center'})
         },
-          error: () => this.onError("Erro ao tentar remover cliente."),
+          error: () => this.onError("Erro ao tentar remover produto."),
         });
       }
     });

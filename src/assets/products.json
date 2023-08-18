@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "description": "Camiseta branca"
+  },
+  {
+    "id": 2,
+    "description": "Calça jeans"
+  },
+  {
+    "id": 3,
+    "description": "Tênis esportivo"
+  },
+  {
+    "id": 4,
+    "description": "Vestido floral"
+  },
+  {
+    "id": 5,
+    "description": "Sapato de couro"
+  },
+  {
+    "id": 6,
+    "description": "Bolsa de ombro"
+  },
+  {
+    "id": 7,
+    "description": "Jaqueta de couro"
+  },
+  {
+    "id": 8,
+    "description": "Saia plissada"
+  },
+  {
+    "id": 9,
+    "description": "Relógio de pulso"
+  },
+  {
+    "id": 10,
+    "description": "Óculos de sol"
+  }
+]
