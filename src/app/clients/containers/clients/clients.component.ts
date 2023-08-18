@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from 'src/app/shared/components/error-dialog/error-dialog.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-clients',
@@ -50,13 +51,21 @@ export class ClientsComponent implements OnInit {
   }
 
   onDelete(client: Client) {
-    this.clientsService.delete(client.id).subscribe({
-      next: () => {
-        this.refresh();
-        this.snackBar.open('Cliente removido com sucesso!', 'X', 
-      {duration: 2000, verticalPosition: 'top', horizontalPosition: 'center'})
-    },
-      error: () => this.onError("Erro ao tentar remover cliente."),
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: "Tem certeza que deseja remover esse usuário?",
+    });
+
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        this.clientsService.delete(client.id).subscribe({
+          next: () => {
+            this.refresh();
+            this.snackBar.open('Cliente removido com sucesso!', 'X', 
+          {duration: 2000, verticalPosition: 'top', horizontalPosition: 'center'})
+        },
+          error: () => this.onError("Erro ao tentar remover cliente."),
+        });
+      }
     });
   }
 }
