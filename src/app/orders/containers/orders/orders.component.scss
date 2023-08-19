@@ -1,0 +1,44 @@
+mat-card {
+    padding: 0px 16px;
+    max-width: 80%;
+    margin: 2em auto;
+    text-align: center;
+}
+
+mat-toolbar {
+    margin-bottom: 12px;
+}
+
+.column-flex {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+}
+
+.loading-spinner {
+    margin-top: 12px;
+    padding: 25px;
+    background: rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.full-width {
+    width: 100%;
+}
+
+mat-card-content {
+    padding: 12px 0;
+}
+
+.min-width {
+    width: 100%;
+    min-width: 150px;
+}
+
+mat-card-actions{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}

@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Product } from './../../model/product';
+import { UtilsService } from 'src/app/shared/services/utils.service';
 
 @Component({
   selector: 'app-product-form',
@@ -19,6 +20,7 @@ export class ProductFormComponent {
 
   constructor(private formBuilder: NonNullableFormBuilder,
     private service: ProductsService,
+    private utils: UtilsService,
     private snackBar: MatSnackBar,
     private location: Location,
     private route: ActivatedRoute ) {
@@ -54,18 +56,6 @@ export class ProductFormComponent {
   }
 
   getErrorMessage(fieldName: string) {
-    const field = this.form.get(fieldName);
-    if (field?.hasError('required')) {
-      return "Campo obrigatório"
-    }
-    if (field?.hasError('minlength')) {
-      const requiredLength = field.errors? field.errors['minlength']["requiredLength"] : 5;
-      return `O tamanho mínimo precisa ser de ${requiredLength} caracteres.`
-    }
-    if (field?.hasError('maxlength')) {
-      const requiredLength = field.errors? field.errors['maxlength']["requiredLength"] : 5;
-      return `Tamanho máximo excedido de ${requiredLength} caracteres.`
-    }
-    return "Erro"
+    return this.utils.getErrorMessage(fieldName, this.form);
   }
 }

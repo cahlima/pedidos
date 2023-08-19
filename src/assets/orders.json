@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "description": "Pedido de camisetas"
+  },
+  {
+    "id": 2,
+    "description": "Pedido de sapatos"
+  },
+  {
+    "id": 3,
+    "description": "Pedido de acessórios"
+  },
+  {
+    "id": 4,
+    "description": "Pedido de calças"
+  },
+  {
+    "id": 5,
+    "description": "Pedido de vestidos"
+  },
+  {
+    "id": 6,
+    "description": "Pedido de jaquetas"
+  },
+  {
+    "id": 7,
+    "description": "Pedido de bonés"
+  },
+  {
+    "id": 8,
+    "description": "Pedido de óculos"
+  },
+  {
+    "id": 9,
+    "description": "Pedido de relógios"
+  },
+  {
+    "id": 10,
+    "description": "Pedido de bolsas"
+  }
+]
