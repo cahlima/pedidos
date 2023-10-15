@@ -1,4 +1,5 @@
 export interface Product {
-    id: number;
-    description: string;
+  id: number;
+  description: string;
+  disabled?: boolean;
 }

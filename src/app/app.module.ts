@@ -8,11 +8,11 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { DatePipe } from '@angular/common';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -20,10 +20,15 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
     MatToolbarModule,
     MatButtonModule,
     HttpClientModule,
-    NgxMaskDirective, 
-    NgxMaskPipe
+    NgxMaskDirective,
+    NgxMaskPipe,
   ],
-  providers: [provideNgxMask()],
-  bootstrap: [AppComponent]
+  providers: [
+    provideNgxMask(),
+    DatePipe,
+
+    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

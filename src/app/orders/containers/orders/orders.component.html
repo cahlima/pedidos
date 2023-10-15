@@ -1,23 +1,36 @@
 <mat-card>
-    <mat-card-content>
-        <mat-toolbar color="primary">
-            Pedidos
-        </mat-toolbar>
-        <form [formGroup]="form" class="min-width">
-            <mat-form-field class="full-width">
-                <input type="text" mask="000.000.000-00" matInput placeholder="CPF" formControlName="cpf">
-                <mat-error *ngIf="form.get('cpf')?.invalid">{{getErrorMessage("cpf")}}</mat-error>
-            </mat-form-field>
-            <button color="primary" [disabled]="!form.valid" mat-raised-button (click)="onSearch()">Ver pedidos</button>
-        </form>
-        <app-orders-list 
-          *ngIf="orders$ | async as orders;"
-          [orders]="orders"
-        ></app-orders-list>
-        <ng-template [ngIf]="loading">
-            <div class="loading-spinner">
-                <mat-spinner></mat-spinner>
-            </div>
-        </ng-template>
-    </mat-card-content>
+  <mat-card-content>
+    <mat-toolbar color="primary"> Pedidos </mat-toolbar>
+    <form [formGroup]="form" class="min-width">
+      <mat-form-field class="full-width">
+        <input
+          type="text"
+          mask="000.000.000-00"
+          matInput
+          placeholder="CPF"
+          formControlName="cpf"
+        />
+        <mat-error *ngIf="form.get('cpf')?.invalid">{{
+          getErrorMessage("cpf")
+        }}</mat-error>
+      </mat-form-field>
+      <button
+        color="primary"
+        [disabled]="!form.valid"
+        mat-raised-button
+        (click)="onSearch()"
+      >
+        Ver pedidos
+      </button>
+    </form>
+    <app-orders-list
+      *ngIf="orders$ | async as orders"
+      [orders]="orders"
+    ></app-orders-list>
+    <ng-template [ngIf]="loading">
+      <div class="loading-spinner">
+        <mat-spinner></mat-spinner>
+      </div>
+    </ng-template>
+  </mat-card-content>
 </mat-card>

@@ -11,34 +11,41 @@ import { catchError, map, startWith, tap } from 'rxjs/operators';
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.component.html',
-  styleUrls: ['./orders.component.scss']
+  styleUrls: ['./orders.component.scss'],
 })
 export class OrdersComponent {
   orders$: Observable<Order[]> | null = null;
 
   form = this.formBuilder.group({
-    cpf: ['', [Validators.required, Validators.minLength(11),  Validators.maxLength(11)]]
+    cpf: [
+      '',
+      [Validators.required, Validators.minLength(11), Validators.maxLength(11)],
+    ],
   });
 
   loading = false;
 
-  constructor(private ordersService: OrdersService,
+  constructor(
+    private ordersService: OrdersService,
     private formBuilder: NonNullableFormBuilder,
     public dialog: MatDialog,
-    private utils: UtilsService ) {
-  }
+    private utils: UtilsService
+  ) {}
 
   refresh() {
-    this.loading = true
-    this.orders$ = this.ordersService.list().pipe(
+    if (!this.form.value.cpf) return;
+    this.loading = true;
+    this.orders$ = this.ordersService.list(this.form.value.cpf).pipe(
       map((value: any) => {
-        this.loading = value.type === 'start'
-        return value
+        this.loading = value.type === 'start';
+        return value;
       }),
-      catchError(error => {this.loading = false
-      this.onError('Erro ao carregar os pedidos.')
-      return of([]);
-    }));
+      catchError((error) => {
+        this.loading = false;
+        this.onError('Erro ao carregar os pedidos.');
+        return of([]);
+      })
+    );
   }
 
   onError(errorMsg: string) {
@@ -49,8 +56,8 @@ export class OrdersComponent {
 
   ngOnInit(): void {
     this.form.setValue({
-      cpf: ""
-    })
+      cpf: '08899971951',
+    });
   }
 
   onSearch() {

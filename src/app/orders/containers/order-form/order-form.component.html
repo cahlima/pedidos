@@ -1,0 +1,83 @@
+<mat-card>
+  <mat-toolbar color="primary"> Novo Pedido </mat-toolbar>
+  <mat-card-content>
+    <form [formGroup]="form" class="min-width">
+      <mat-form-field class="full-width">
+        <input
+          type="text"
+          mask="000.000.000-00"
+          matInput
+          placeholder="CPF"
+          formControlName="cpf"
+        />
+        <mat-error *ngIf="form.get('cpf')?.invalid">{{
+          getErrorMessage("cpf")
+        }}</mat-error>
+      </mat-form-field>
+      <form [formGroup]="formProduct" class="min-width">
+        <div class="listInput">
+          <mat-form-field class="full-width">
+            <mat-label>Produtos</mat-label>
+            <mat-select formControlName="product">
+              <div *ngFor="let product of products$ | async">
+                <mat-option *ngIf="!product.disabled" [value]="product">
+                  {{ product.description }}
+                </mat-option>
+              </div>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input
+              matInput
+              #inputDescription
+              placeholder="Quantidade"
+              formControlName="quantity"
+              type="number"
+            />
+            <mat-error *ngIf="formProduct.get('quantity')?.invalid">{{
+              getErrorMessage("quantity")
+            }}</mat-error>
+          </mat-form-field>
+          <button
+            class="buttonList"
+            mat-raised-button
+            [disabled]="!formProduct.valid"
+            color="primary"
+            (click)="addProduct()"
+          >
+            Adicionar Produto
+          </button>
+        </div>
+
+        <table id="productsList" *ngIf="addedProducts.length !== 0">
+          <thead>
+            <tr>
+              <th class="title" colspan="2">ITENS ADICIONADOS AO PEDIDO</th>
+            </tr>
+            <tr>
+              <th class="column-prod">PRODUTO</th>
+              <th class="column-quant">QUANTIDADE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of addedProducts">
+              <td>{{ p.product.description }}</td>
+              <td>{{ p.quantity }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button
+      mat-raised-button
+      [disabled]="!form.valid || addedProducts.length == 0"
+      color="primary"
+      (click)="onSubmit()"
+    >
+      Salvar
+    </button>
+    <!-- <button mat-raised-button (click)="onCancel()">Cancelar</button> -->
+  </mat-card-actions>
+</mat-card>

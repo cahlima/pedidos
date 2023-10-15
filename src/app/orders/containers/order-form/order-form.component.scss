@@ -1,0 +1,86 @@
+.full-width {
+  width: 100%;
+}
+
+.listInput {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.buttonList {
+  width: 350px;
+  margin-top: 10px;
+}
+
+mat-card {
+  padding: 16px;
+  max-width: 80%;
+  margin: 2em auto;
+  text-align: center;
+}
+
+mat-card-content {
+  padding: 12px 0;
+}
+
+.min-width {
+  width: 100%;
+  min-width: 150px;
+}
+
+mat-card-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+///
+#productsList {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 50%;
+  margin: 0 auto;
+}
+
+#productsList td,
+#productsList th {
+  border: 1px solid #bbb;
+  padding: 8px;
+}
+
+#productsList tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#productsList tr {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+#productsList tr:hover {
+  background-color: #ddd;
+}
+
+.title {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: #673ab7;
+  color: white;
+}
+
+.column {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+}
+
+.column-prod {
+  width: 70%;
+}
+
+.actions {
+  padding-top: 0;
+  padding-right: 24px;
+  padding-bottom: 20px;
+}

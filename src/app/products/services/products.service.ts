@@ -1,35 +1,44 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { first, map, retry } from 'rxjs/operators';
 import { Product } from '../model/product';
-import { of } from 'rxjs'
-import { tap, delay, catchError, first, map } from 'rxjs/operators'
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductsService {
+  private readonly API = 'http://localhost:5000/produtos';
+  constructor(private httpClient: HttpClient) {}
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  };
 
-  private readonly API = "/assets/products.json"; // api/products
-  private readonly API_PRODUCT = "/assets/product.json"; // api/product
-
-  constructor(private httpClient: HttpClient) { }
-
-  list() {
+  list(): Observable<Product[]> {
     return this.httpClient.get<Product[]>(this.API).pipe(
-      first(),
+      map((res: any[]) => {
+        const data = res.map((obj) => ({
+          id: obj.id,
+          description: obj.descricao,
+          disabled: false,
+        }));
+        return data;
+      }),
+      retry(2)
     );
-    // .pipe(
-    //   delay(5000)
-    //   tap(products => console.log(products))
-    // )
   }
 
   loadById(id: number) {
-    // TODO - `${this.API}/${id}`
-    let values = this.httpClient.get<Product>(this.API_PRODUCT).pipe(
-      first()
+    return this.httpClient.get<Product>(this.API + '/' + id).pipe(
+      map((obj: any) => {
+        const data = {
+          id: obj.id,
+          description: obj.descricao,
+        };
+        return data;
+      }),
+      retry(2)
     );
-    return values;
   }
 
   save(record: Partial<Product>) {
@@ -40,23 +49,33 @@ export class ProductsService {
     }
   }
 
-  private create(record: Partial<Product>) {
-    return this.httpClient.post<Product>(this.API, record).pipe(
-      first()
-    ); 
+  private create(record: Partial<Product>): Observable<Product> {
+    return this.httpClient
+      .post<Product>(
+        this.API,
+        {
+          descricao: record.description,
+        },
+        this.httpOptions
+      )
+      .pipe(first());
   }
 
   private update(record: Partial<Product>) {
-    // TODO - `${this.API}/${record.id}`
-    return this.httpClient.put<Product>(this.API, record).pipe(
-      first()
-    ); 
+    return this.httpClient
+      .put<Product>(
+        this.API + '/' + record.id,
+        {
+          descricao: record.description,
+        },
+        this.httpOptions
+      )
+      .pipe(first());
   }
 
   delete(id: number) {
-    // TODO - `${this.API}/${id}`
-    return this.httpClient.delete(this.API).pipe(
-      first()
-    ); 
+    return this.httpClient
+      .delete<Product>(this.API + '/' + id, this.httpOptions)
+      .pipe(retry(1));
   }
 }

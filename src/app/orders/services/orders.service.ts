@@ -1,36 +1,37 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Order } from '../model/order';
-import { of } from 'rxjs'
-import { tap, delay, catchError, first, map } from 'rxjs/operators'
+import { of } from 'rxjs';
+import { tap, delay, catchError, first, map, retry } from 'rxjs/operators';
+import { OrderItem } from '../model/orderItem';
+import { OrderItemRequest } from '../model/orderItemRequest';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OrdersService {
+  private readonly API = 'http://localhost:5000/pedidos';
+  private readonly API_ITEM = 'http://localhost:5000/item-do-pedido';
 
-  private readonly API = "/assets/orders.json"; // api/clients
-  private readonly API_ORDER = "/assets/order.json"; // api/client
+  constructor(private httpClient: HttpClient) {}
+  httpOptions = {
+    headers: new HttpHeaders({
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      responseType: 'text',
+    }),
+  };
 
-  constructor(private httpClient: HttpClient) { }
-
-  list() {
-    return this.httpClient.get<Order[]>(this.API).pipe(
-      delay(5000),
-      first(),
-    );
-    // .pipe(
-    //   delay(5000)
-    //   tap(orders => console.log(orders))
-    // )
+  list(cpf: String) {
+    return this.httpClient
+      .get<Order[]>(this.API + '/cpf/' + cpf)
+      .pipe(retry(2));
   }
 
-  loadById(id: number) {
-    // TODO - `${this.API}/${id}`
-    let values = this.httpClient.get<Order>(this.API_ORDER).pipe(
-      first()
-    );
-    return values;
+  loadByPedidoId(id: number) {
+    return this.httpClient
+      .get<OrderItem[]>(this.API_ITEM + '/' + id)
+      .pipe(retry(2));
   }
 
   save(record: Partial<Order>) {
@@ -40,24 +41,28 @@ export class OrdersService {
       return this.create(record);
     }
   }
+  public responseData: string = '';
 
+  saveItens(record: OrderItemRequest) {
+    console.log('record');
+    console.log(record);
+    console.log('record');
+
+    return this.httpClient.post<string>(
+      this.API + '/create',
+      record,
+      this.httpOptions
+    );
+  }
   private create(record: Partial<Order>) {
-    return this.httpClient.post<Order>(this.API, record).pipe(
-      first()
-    ); 
+    return this.httpClient.post<Order>(this.API, record).pipe(first());
   }
 
   private update(record: Partial<Order>) {
-    // TODO - `${this.API}/${record.id}`
-    return this.httpClient.put<Order>(this.API, record).pipe(
-      first()
-    ); 
+    return this.httpClient.put<Order>(this.API, record).pipe(first());
   }
 
   delete(id: number) {
-    // TODO - `${this.API}/${id}`
-    return this.httpClient.delete(this.API).pipe(
-      first()
-    ); 
+    return this.httpClient.delete(this.API).pipe(first());
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Client } from '../../model/client';
 import { ClientsService } from '../../services/clients.service';
 import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators'
+import { catchError } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from 'src/app/shared/components/error-dialog/error-dialog.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,26 +12,29 @@ import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmat
 @Component({
   selector: 'app-clients',
   templateUrl: './clients.component.html',
-  styleUrls: ['./clients.component.scss']
+  styleUrls: ['./clients.component.scss'],
 })
 export class ClientsComponent implements OnInit {
-  
   clients$: Observable<Client[]> | null = null;
   displayedColumns: string[] = ['name', 'surname', 'cpf', 'actions'];
 
-  constructor(private clientsService: ClientsService,
+  constructor(
+    private clientsService: ClientsService,
     public dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar ) {
-      this.refresh();
+    private snackBar: MatSnackBar
+  ) {
+    this.refresh();
   }
 
   refresh() {
-    this.clients$ = this.clientsService.list().pipe(catchError(error => {
-      this.onError('Erro ao carregar clientes.')
-      return of([]);
-    }));
+    this.clients$ = this.clientsService.list().pipe(
+      catchError((error) => {
+        this.onError('Erro ao carregar clientes.');
+        return of([]);
+      })
+    );
   }
 
   onError(errorMsg: string) {
@@ -43,16 +46,16 @@ export class ClientsComponent implements OnInit {
   ngOnInit(): void {}
 
   onAdd() {
-    this.router.navigate(['new'], {relativeTo: this.route})
+    this.router.navigate(['new'], { relativeTo: this.route });
   }
 
   onEdit(client: Client) {
-    this.router.navigate(['edit', client.id], {relativeTo: this.route})
+    this.router.navigate(['edit', client.id], { relativeTo: this.route });
   }
 
   onDelete(client: Client) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: "Tem certeza que deseja remover esse cliente?",
+      data: 'Tem certeza que deseja remover esse cliente?',
     });
 
     dialogRef.afterClosed().subscribe((result: boolean) => {
@@ -60,10 +63,21 @@ export class ClientsComponent implements OnInit {
         this.clientsService.delete(client.id).subscribe({
           next: () => {
             this.refresh();
-            this.snackBar.open('Cliente removido com sucesso!', 'X', 
-          {duration: 2000, verticalPosition: 'top', horizontalPosition: 'center'})
-        },
-          error: () => this.onError("Erro ao tentar remover cliente."),
+            this.snackBar.open('Cliente removido com sucesso!', 'X', {
+              duration: 2000,
+              verticalPosition: 'bottom',
+              horizontalPosition: 'center',
+            });
+          },
+          error: (e) => {
+            if (e.error.error.sqlstate === '23503') {
+              this.onError(
+                'Este cliente não pode ser removido porque há um pedido ligado a ele.'
+              );
+            } else {
+              this.onError('Erro ao tentar remover cliente.');
+            }
+          },
         });
       }
     });

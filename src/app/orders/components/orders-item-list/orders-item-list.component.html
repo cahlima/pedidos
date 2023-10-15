@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Itens do produto</h1>
+<div mat-dialog-content>
+  <table id="orders">
+    <thead>
+      <tr>
+        <th>Descrição</th>
+        <th>Quantidade</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let d of data">
+        <td>{{ d.descricao }}</td>
+        <td>{{ d.qtdade }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div mat-dialog-actions align="end" class="actions">
+  <button mat-button mat-dialog-close>Fechar</button>
+</div>
